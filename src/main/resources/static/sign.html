@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<!-- Responsive -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>频道推荐系统-登录</title>
+	<link href="css/bootstrap-3.3.7.css" rel="stylesheet" type="text/css">
+	<link href="css/sign.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="js/session.js"></script>
+	<script type="text/javascript" src="js/login.js"></script>
+</head>
+
+<body>
+<div class="container">
+	<form class="form-signin" method="post" id="sign">
+		<h2 class="form-signin-heading" id="title">请登录</h2>
+		<label for="inputName" class="sr-only">姓名</label>
+		<input type="name" id="inputName" name="inputName" class="form-control" placeholder="输入姓名" required="required" autofocus="autofocus">
+		<label for="inputPwd" class="sr-only">密码</label>
+		<input type="password" id="inputPwd" name="inputPwd" class="form-control" placeholder="输入密码" required autofocus>
+		<label for="inputPwd2" class="sr-only">密码2</label>
+		<input type="password" id="inputPwd2" name="inputPwd2" class="form-control" placeholder="确认密码">
+		<span id="pwdHint"></span>
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" value="remember-me" name="rem">
+				记住我
+			</label>
+			<a class="float-right" id="to-login" onclick="toLogin()">去注册</a>
+			<a class="float-right" id="to-signin" onclick="toSignin()">去登录</a>
+		</div>
+		<input class="btn btn-lg btn-primary btn-block" type="button" id="signin" value="登录">
+		<input class="btn btn-lg btn-primary btn-block" type="button" id="login" value="注册">
+	</form>
+</div>
+</body>
+</html>

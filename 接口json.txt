@@ -1,0 +1,67 @@
+
+message: {
+    status: (成功为1，失败为0)
+    error: (成功时为空，失败时为失败的原因)
+    data: (返回的数据)
+}
+
+(每个请求返回的json都是一个message，返回的数据在data里面，下面所写的return都指的是data)
+
+注册：
+    url:register_auth
+    method:post
+    params: {
+        userName
+        password
+        password2
+    }
+    return: {
+        userId
+        userName
+    }
+
+登录:
+    url: login_auth
+    method: post
+    params： {
+        userName
+        password
+    }
+    return: {
+        userId
+        userName
+    }
+
+查询历史记录
+    url: getHistory/userId
+    method: get
+    return: list[{channelId,channelName,type,startTime,lastTime},...]
+                    频道ID,频道名称,频道类别,上次观看时间，持续观看时间
+                                      startTime 格式:yyyy-MM-dd HH:mm:ss
+
+获取某个类别下所有频道：
+    url: getChannels/channelId
+    method: get
+    return: list[{channelId,channelName,type,clickTime}]
+                                                点击量
+
+当用户点击某个频道时,改变点击量和时间：
+    url: click
+    method: post
+    params: {
+        userId
+        channelId
+    }
+
+当用户退出当前播放时，记录观看持续时间
+    url: close
+    method: post
+    params: {
+        userId
+        channelId
+    }
+
+推荐：
+    url: getRecommand/userId
+    method: get
+    return: {channelId,channelName,type,clickTimes}
