@@ -10,4 +10,4 @@
 
 ## 发现的bugs
 - 注册界面上的记住我只是显示而已，没有实际作用
-- `ChannelRepository`的`findByType`没有作用
+- `ChannelRepository`的`findByType`没有作用,发现原因：中文乱码。指定数据库连接编码解决。
