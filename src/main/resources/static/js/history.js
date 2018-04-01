@@ -9,14 +9,13 @@ $(function(){
 
 function loadHistory(userId){//获取历史记录
 	var url = "getHistory/"+userId;
-	$.getJSON(url,function(data){
-		list = data.data;
-		var length = list.length;
-		for (var i = 0; i < length; i++) {
-			var channel = list[i];//list中的每个频道
-			//$("#list").append("<a href='#' class='list-group-item' id='"+channel.channelName+"'>"+channel.channelName+"</a>");
-			$("#tbody").append("<tr onclick='selectC(this)'><td>"+channel.channelId+"</td><td>"+channel.channelName+"</td><td>"+channel.type+"</td><td>"+channel.startTime+"</td><td>"+channel.lastTime+"</td></tr>");
-		};
+	$.getJSON(url,function(result){
+        var app4 = new Vue({
+            el: '#tbody',
+            data: {
+                channels:result.data
+            }
+        })
 	});
 }
 
