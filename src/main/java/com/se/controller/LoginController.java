@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.misc.BASE64Encoder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by takahiro on 2017/7/2.
@@ -28,19 +30,19 @@ public class LoginController {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public String login(){
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
         return "sign";
     }
 
-    @RequestMapping(value = "/register",method = RequestMethod.GET)
-    public String register(){
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register() {
         return "register";
     }
 
-    @RequestMapping(value = "/register_auth",method = RequestMethod.POST)
+    @RequestMapping(value = "/register_auth", method = RequestMethod.POST)
     @ResponseBody
-    public String register_auth(@RequestBody String body) throws IOException{
+    public String register_auth(@RequestBody String body) throws IOException {
         System.out.println(body);
         RegisterRequest obj;
         Message<User> message = new Message<User>();
@@ -55,15 +57,16 @@ public class LoginController {
         String username = obj.getUsername();
         String password = obj.getPassword();
         String password2 = obj.getPassword2();
-        if(userRepository.findByUsername(username)!=null) {
+        if (userRepository.findByUsername(username) != null) {
             message.setError("this username has exists");
             return objectMapper.writeValueAsString(message);
         }
-        if(!password.equals(password2)) {
+        if (!password.equals(password2)) {
             message.setError("two passwords are not the same");
             return objectMapper.writeValueAsString(message);
         }
-        User user = new User(username,password);
+        password = encryptPassword(password);
+        User user = new User(username, password);
         userRepository.save(user);
         user = userRepository.findByUsername(username);
         message.setStatus(1);
@@ -71,9 +74,9 @@ public class LoginController {
         return objectMapper.writeValueAsString(message);
     }
 
-    @RequestMapping(value = "/login_auth",method = RequestMethod.POST)
+    @RequestMapping(value = "/login_auth", method = RequestMethod.POST)
     @ResponseBody
-    public String login_auth(@RequestBody String body) throws JsonProcessingException{
+    public String login_auth(@RequestBody String body) throws JsonProcessingException {
         System.out.println(body);
         Message<LoginReturn> message = new Message();
         LoginRequest obj;
@@ -86,9 +89,9 @@ public class LoginController {
             return objectMapper.writeValueAsString(message);
         }
         String username = obj.getUsername();
-        String password = obj.getPassword();
-        User user = userRepository.findByUsernameAndPassword(username,password);
-        if(user==null) {
+        String password = encryptPassword(obj.getPassword());
+        User user = userRepository.findByUsernameAndPassword(username, password);
+        if (user == null) {
             message.setError("no such user or password error");
             return objectMapper.writeValueAsString(message);
         }
@@ -99,5 +102,17 @@ public class LoginController {
         message.setData(loginReturn);
         return objectMapper.writeValueAsString(message);
     }
+
+    public String encryptPassword(String password) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            BASE64Encoder base64en = new BASE64Encoder();
+            return base64en.encode(md5.digest(password.getBytes()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
