@@ -6,8 +6,6 @@ import com.se.mapper.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,19 +15,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class Application implements EmbeddedServletContainerCustomizer {
+public class Application {
     @Autowired
     UserRepository userRepository;
     @Autowired
     HistoryRepository historyRepository;
     @Autowired
     ChannelRepository channelRepository;
-    public static void main(String[]args) {
+
+    public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    @Override
-    public void customize(ConfigurableEmbeddedServletContainer container) {
-        container.setPort(8080);
-    }
+
 }
