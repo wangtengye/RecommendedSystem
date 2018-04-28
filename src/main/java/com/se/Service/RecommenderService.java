@@ -34,17 +34,23 @@ public class RecommenderService {
         Map<Integer,Map<Integer,Integer>> ucmMap = produceUserChannelMarkMap(histories);
 
         if (!ucmMap.containsKey(userId) ){
-            throw new Exception("用户没有观看记录，无法推荐");
+            System.out.println("用户没有观看记录，改用最流行推荐法");
+            List<Map.Entry<Integer,Double>> popList = popularTopK(k);
+            System.out.println("前K大的popList流行排名:"+popList);
+            for (Map.Entry<Integer,Double> enrty : popList) {
+                enrty.setValue(0.0);
+            }
+            return popList;
         }
 
         Map<Integer,Map<Integer,Double>> wMap = produceWMap(ucmMap);
         List<Map.Entry<Integer,Double>> pList = producePList(userId,ucmMap,wMap);
-        System.out.println("推荐排名:"+pList);
 
         if(pList.size() == 0) {
             throw new Exception("推荐失败");
         }
         pList = pList.subList(0, Math.min(k,pList.size()));
+        System.out.println("前K大的pList推荐排名:"+pList);
         return pList;
     }
 
@@ -62,7 +68,41 @@ public class RecommenderService {
     }
 
     /**
-     * 产生 UserChannelMap，形式为 Map<userId, Map<ChannelId, Mark>>
+     * 查找最流行的 k 个频道
+     *
+     * @param k
+     * @return 最流行的 k 个频道，及他们的流行度
+     * @throws Exception
+     */
+    public  List<Map.Entry<Integer,Double>> popularTopK(int k) throws Exception{
+        List<History> histories = historyRepository.findAll();
+        if(histories==null) {
+            throw new Exception("没有历史记录");
+        }
+
+        // N 形式为 Map<cid, n>，其中n为cid的mark总分
+        Map<Integer,Double> N = new HashMap<Integer, Double>();
+
+        for (History history : histories){
+            int uid = history.getPk().getUserId();
+            int cid = history.getPk().getChannelId();
+            long lastTime = history.getLastTime();
+            int mark = calMark(lastTime);
+
+            if (!N.containsKey(cid)){
+                N.put(cid,0.0);
+            }
+            N.put(cid, N.get(cid)+mark );
+        }
+        List<Map.Entry<Integer,Double>> popList =  getSortedEntries(N);
+        popList = popList.subList(0, Math.min(k,popList.size()));
+        return popList;
+    }
+
+
+
+    /**
+     * 根据历史记录产生 UserChannelMarkMap，形式为 Map<userId, Map<ChannelId, Mark>>
      *
      * @param histories 用户观看记录
      * @return UserChannelMap
@@ -141,7 +181,6 @@ public class RecommenderService {
         return W;
     }
 
-
     /**
      * 产生 pList，用户最喜爱的频道列表，形式为 List<Map.Entry<cid,mark>>，其中mark是对用户喜爱度的估计
      *
@@ -172,7 +211,6 @@ public class RecommenderService {
         List<Map.Entry<Integer,Double>> pList = getSortedEntries(pMap);
         return pList;
     }
-
 
     /**
      * 根据用户观看频道的时间，计算用户对频道的喜爱度
