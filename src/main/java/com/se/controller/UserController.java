@@ -2,6 +2,7 @@ package com.se.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.se.Service.RecommenderService;
 import com.se.jsonmodel.HistoryReturn;
 import com.se.jsonmodel.Message;
 import com.se.mapper.ChannelRepository;
@@ -29,8 +30,12 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private ChannelRepository channelRepository;
+    @Autowired
+    private RecommenderService recommenderService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
+
+
 
     @RequestMapping(value = "/home",method = RequestMethod.GET)
     public String home(){
@@ -157,130 +162,62 @@ public class UserController {
         return objectMapper.writeValueAsString(message);
     }
 
-    @RequestMapping(value = "/recommand/{userId}",method = RequestMethod.GET)
+    /**
+     * “手气不错”，向用户推荐最喜欢的一个频道
+     * @param userId
+     * @return  Message<Channel> 用户最喜欢的一个频道
+     * @throws JsonProcessingException
+     */
+    @RequestMapping(value = "/recommend/{userId}",method = RequestMethod.GET)
     @ResponseBody
-    public String recommand(@PathVariable int userId)
+    public String recommandGoodLuck(@PathVariable int userId)
             throws JsonProcessingException {
         Message<Channel> message = new Message();
-        List<History> histories = historyRepository.findAll();
-        if(histories==null) {
-            message.setError("no record");
-            return objectMapper.writeValueAsString(message);
+        try{
+            int channelID = recommenderService.recommendOne(userId);
+            Channel channel = channelRepository.findById(channelID);
+            message.setStatus(1);
+            message.setData(channel);
+        }catch (Exception e){
+            e.printStackTrace();
+            message.setError(e.getMessage());
         }
-        Map<Integer,Map> ucMap = produceMap(histories);
-        Map<Integer,Map> wMap = train(ucMap);
-        int rcid = recommandForUser(userId,ucMap,wMap);
-        if(rcid<0) {
-            message.setError("recommand fail");
-            return objectMapper.writeValueAsString(message);
-        }
-        Channel channel = channelRepository.findById(rcid);
-        message.setStatus(1);
-        message.setData(channel);
         return objectMapper.writeValueAsString(message);
     }
 
-    Map produceMap(List<History> histories) {
-        Map<Integer,Map> ucMap = new HashMap<Integer, Map>();
-        for(History history:histories) {
-            int uid = history.getPk().getUserId();
-            if(!ucMap.containsKey(uid)) {
-                ucMap.put(uid,new HashMap<Integer,Integer>());
-            }
-            Map<Integer,Integer> userMap = ucMap.get(uid);
-            int cid = history.getPk().getChannelId();
-            long lastTime = history.getLastTime();
-            int mark = calMark(lastTime);
-            userMap.put(cid,mark);
-        }
-        return ucMap;
-    }
+    /**
+     * 向用户推荐最喜欢的 k 个频道
+     * @param userId
+     * @return 用户最喜欢的 k 个频道
+     * @throws JsonProcessingException
+     */
+    @RequestMapping(value = "/recommendtopk/{userId}/{k}",method = RequestMethod.GET)
+    @ResponseBody
+    public String recommandTopK(@PathVariable int userId,@PathVariable int k)
+            throws JsonProcessingException {
 
-    int calMark(long time) {
-        time /= 1000;
-        if(time >= 100) {
-            return 10;
-        }
-        return (int)time/10;
-    }
+        Message<List<Map<String,Object>>> message = new Message();
+        try{
+            List<Map.Entry<Integer,Double>> pList = recommenderService.recommendTopK(userId,k);
+            List<Map<String,Object>> dataList = new ArrayList<Map<String, Object>>();
 
-    Map train(Map<Integer,Map> ucMap) {
-        Map<Integer,Integer> N = new HashMap<Integer, Integer>();
-        Map<Integer,Map> C = new HashMap<Integer, Map>();
-        Map<Integer,Map> W = new HashMap<Integer, Map>();
-        for(int uid:ucMap.keySet()) {
-            Map<Integer,Integer> uMap = ucMap.get(uid);
-            for(int p:uMap.keySet()) {
-                if(!N.containsKey(p)) {
-                    N.put(p,0);
-                }
-                if(!C.containsKey(p)) {
-                    C.put(p,new HashMap<Integer,Integer>());
-                }
-                if(!W.containsKey(p)) {
-                    W.put(p,new HashMap<Integer,Integer>());
-                }
-                N.put(p,N.get(p)+1);
-                Map<Integer,Integer> cMap = C.get(p);
-                for(int q:uMap.keySet()) {
-                    if(p!=q) {
-                        if(!cMap.containsKey(q)) {
-                            cMap.put(q,0);
-                        }
-                        cMap.put(q,cMap.get(q)+1);
-                    }
-                }
-            }
-        }
-        for(int i:C.keySet()) {
-            Map<Integer,Integer> cMap = C.get(i);
-            Map<Integer,Double> wMap = W.get(i);
-            for(int j:cMap.keySet()) {
-                int n = cMap.get(j);
-                wMap.put(j,1.0*n/Math.sqrt(N.get(i)*N.get(j)));
-            }
-        }
-        return W;
-    }
+            for (int i=0;i<pList.size();i++){
+                int channelId = pList.get(i).getKey();
+                double score = pList.get(i).getValue();
+                Channel channel = channelRepository.findById(channelId);
 
-    int recommandForUser(int userId,Map<Integer,Map> ucMap,Map<Integer,Map> W) {
-        Map<Integer,Integer> markMap = ucMap.get(userId);
-        Map<Integer,Double> wMap = W.get(userId);
-        Map<Integer,Double> rankMap = new HashMap<Integer, Double>();
-        int K = 5;
-        for(int i:markMap.keySet()) {
-            List<Map.Entry<Integer,Double>> list = getTops(wMap);
-            for(int k=0;k<K;k++) {
-                int j = list.get(k).getKey();
-                double w = list.get(k).getValue();
-//                if(!markMap.containsKey(j)) {
-                    if(!rankMap.containsKey(j)) {
-                        rankMap.put(j,0.0);
-                    }
-                    rankMap.put(j,rankMap.get(j)+w*markMap.get(i));
-//                }
+                Map<String,Object> temp = new HashMap<String,Object>();
+                temp.put("ChannelInfo",channel);
+                temp.put("Score",score);
+                dataList.add(temp);
             }
-        }
-        int rcid = -1;
-        double maxw = 0;
-        for(int i:rankMap.keySet()) {
-            if(maxw < rankMap.get(i)) {
-                maxw = rankMap.get(i);
-                rcid = i;
-            }
-        }
-        return rcid;
-    }
 
-    List getTops(Map<Integer,Double> wMap) {
-        Set<Map.Entry<Integer,Double>> set = wMap.entrySet();
-        List<Map.Entry<Integer,Double>> list = new ArrayList<Map.Entry<Integer, Double>>(set);
-        Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
-                return -o1.getValue().compareTo(o2.getValue());
-            }
-        });
-        return list;
+            message.setStatus(1);
+            message.setData(dataList);
+        }catch (Exception e){
+            e.printStackTrace();
+            message.setError(e.getMessage());
+        }
+        return objectMapper.writeValueAsString(message);
     }
 }
