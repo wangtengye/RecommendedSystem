@@ -165,7 +165,7 @@ public class UserController {
      * @return  Message<Channel> 用户最喜欢的一个频道
      * @throws JsonProcessingException
      */
-    @RequestMapping(value = "/recommand/{userId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/recommend/{userId}",method = RequestMethod.GET)
     @ResponseBody
     public String recommandGoodLuck(@PathVariable int userId)
             throws JsonProcessingException {
@@ -182,4 +182,39 @@ public class UserController {
         return objectMapper.writeValueAsString(message);
     }
 
+    /**
+     * 向用户推荐最喜欢的 k 个频道
+     * @param userId
+     * @return 用户最喜欢的 k 个频道
+     * @throws JsonProcessingException
+     */
+    @RequestMapping(value = "/recommendtopk/{userId}/{k}",method = RequestMethod.GET)
+    @ResponseBody
+    public String recommandTopK(@PathVariable int userId,@PathVariable int k)
+            throws JsonProcessingException {
+
+        Message<List<Map<String,Object>>> message = new Message();
+        try{
+            List<Map.Entry<Integer,Double>> pList = recommenderService.recommendTopK(userId,k);
+            List<Map<String,Object>> dataList = new ArrayList<Map<String, Object>>();
+
+            for (int i=0;i<pList.size();i++){
+                int channelId = pList.get(i).getKey();
+                double score = pList.get(i).getValue();
+                Channel channel = channelRepository.findById(channelId);
+
+                Map<String,Object> temp = new HashMap<String,Object>();
+                temp.put("ChannelInfo",channel);
+                temp.put("Score",score);
+                dataList.add(temp);
+            }
+
+            message.setStatus(1);
+            message.setData(dataList);
+        }catch (Exception e){
+            e.printStackTrace();
+            message.setError(e.getMessage());
+        }
+        return objectMapper.writeValueAsString(message);
+    }
 }
