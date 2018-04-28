@@ -116,8 +116,11 @@ public class UserController {
             return objectMapper.writeValueAsString(message);
         }
         channelRepository.click(channelId);
-        History history = new History();
-        history.setPk(pk);
+        History history = historyRepository.findByPk(pk);
+        if (history == null) {
+            history = new History();
+            history.setPk(pk);
+        }
         history.setStartTime(System.currentTimeMillis());
         historyRepository.save(history);
         message.setStatus(1);
@@ -147,7 +150,7 @@ public class UserController {
             return objectMapper.writeValueAsString(message);
         }
         long startTime = history.getStartTime();
-        history.setLastTime(System.currentTimeMillis()-startTime);
+        history.setLastTime(System.currentTimeMillis()-startTime+history.getLastTime());
         historyRepository.save(history);
         message.setStatus(1);
         message.setData(history);
