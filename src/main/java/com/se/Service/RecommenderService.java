@@ -198,7 +198,7 @@ public class RecommenderService {
         for(int cid:cmMap.keySet()) {
 
             List<Map.Entry<Integer,Double>> list = getSortedEntries( W.get(cid));
-            for(int k=0; k<K; k++) {
+            for(int k=0; k<Math.min(K, list.size()); k++) {
                 int j = list.get(k).getKey();
                 double w = list.get(k).getValue();
 
