@@ -13,14 +13,16 @@
 }
 
 @media screen and (min-width: 992px){
-	.container{
-		width: 970px;
-	}
+  .container{
+    width: 970px;
+  }
 }
- /* Placeholder dashboard ideas
- */
+/* Placeholder dashboard ideas
+*/
 .placeholders {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
+  margin-right: 150px;
+  margin-left: 150px;
   text-align: center;
 }
 .placeholders h4 {
@@ -32,6 +34,6 @@
 .placeholder img {
   display: inline-block;
   /*border-radius: 50%;*/
-    width: 200px;
-    height: 200px;
+  width: 200px;
+  height: 200px;
 }

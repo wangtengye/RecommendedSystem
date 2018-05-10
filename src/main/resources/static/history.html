@@ -15,67 +15,68 @@
 <body>
 <!-- navbar begin -->
 <div class="navbar navbar-inverse navbar-fixed-top">
-  <!-- container begin -->
-  <div class="container">
-    <div class="navbar-header">
-      <!-- toggle icon -->
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">频道推荐系统</a>
-    </div>
-    <!-- navbar-header end -->
-    <!-- navbar-collapse begin -->
-    <div id="navbar" class="collapse navbar-collapse" aria-expanded="false" style="height: 1px;">
-      <ul class="nav navbar-nav">
-        <li><a href="index.html">频道类别</a></li>
-        <li class="active"><a href="#">观看历史</a></li>
-		  <li><a onclick="showUp()">频道推荐</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a class="name" id="userName"></a></li>
-        <li onclick="exit()"><a class="exit">退出</a></li>
-      </ul>
-    </div>
-    <!-- navbar-collapse end --> 
-  </div>
-  <!-- container end -->
+	<!-- container begin -->
+	<div class="container">
+		<div class="navbar-header">
+			<!-- toggle icon -->
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand">频道推荐系统</a>
+		</div>
+		<!-- navbar-header end -->
+		<!-- navbar-collapse begin -->
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="index.html">频道类别</a></li>
+				<li class="active"><a href="#">观看历史</a></li>
+				<li><a href="recommend.html">推荐排行</a></li>
+				<li><a href="#" onclick="showUp()">单个推荐</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a class="name" id="userName"></a></li>
+				<li onclick="exit()"><a class="exit">退出</a></li>
+			</ul>
+		</div>
+		<!-- navbar-collapse end -->
+	</div>
+	<!-- container end -->
 </div>
 <!-- navbar end -->
 
 <div class="container">
 	<div class="row row-offcanvas row-offcanvas-right">
-		
+
 		<!-- main begin -->
 		<div class="col-xs-12 col-sm-9">
-<!--			<p class="pull-right visible-xs">
-				<button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">拉</button>
-			</p>-->
+			<!--			<p class="pull-right visible-xs">
+                            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">拉</button>
+                        </p>-->
 			<h1 class="page-header" id="typeName"></h1><!--类别名-->
 			<!-- table-responsive begin -->
 			<div class="table-responsive">
 				<table class="table table-striped">
 					<thead>
-						<tr>
-							<th>编号</th>
-							<th>名称</th>
-							<th>类别</th>
-							<th>上次观看</th>
-							<th>观看时长</th>
-						</tr>
+					<tr>
+						<th>编号</th>
+						<th>名称</th>
+						<th>类别</th>
+						<th>上次观看</th>
+						<th>观看时长</th>
+					</tr>
 					</thead>
 					<tbody id="tbody">
-						<!-- 频道 -->
-						<tr onclick='selectC(this)' v-for="channel in channels">
-							<td>{{channel.channelId}}</td>
-							<td>{{channel.channelName}}</td>
-							<td>{{channel.type}}</td>
-							<td>{{channel.startTime}}</td>
-							<td>{{channel.lastTime}}</td>
-						</tr>
+					<!-- 频道 -->
+					<tr onclick='selectC(this)' v-for="channel in channels">
+						<td>{{channel.channelId}}</td>
+						<td>{{channel.channelName}}</td>
+						<td>{{channel.type}}</td>
+						<td>{{channel.startTime}}</td>
+						<td>{{channel.lastTime}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
@@ -84,14 +85,14 @@
 		<!-- main end -->
 
 		<!-- siderbar begin -->
-<!--		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">&lt;!&ndash; col-md-2 &ndash;&gt;
-			<div class="list-group" id="list">
-				<a href='channel.html?type=1&name=类别一' class='list-group-item' id='type1'>类别一</a>
-				<a href='channel.html?type=2&name=类别二' class='list-group-item' id='type2'>类别二</a>
-				<a href='channel.html?type=3&name=类别三' class='list-group-item' id='type3'>类别三</a>
-				<a href='channel.html?type=4&name=类别四' class='list-group-item' id='type4'>类别四</a>
-			</div>
-		</div>-->
+		<!--		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">&lt;!&ndash; col-md-2 &ndash;&gt;
+                    <div class="list-group" id="list">
+                        <a href='channel.html?type=1&name=类别一' class='list-group-item' id='type1'>类别一</a>
+                        <a href='channel.html?type=2&name=类别二' class='list-group-item' id='type2'>类别二</a>
+                        <a href='channel.html?type=3&name=类别三' class='list-group-item' id='type3'>类别三</a>
+                        <a href='channel.html?type=4&name=类别四' class='list-group-item' id='type4'>类别四</a>
+                    </div>
+                </div>-->
 		<!-- siderbar end -->
 	</div>
 	<!-- row end -->
@@ -100,16 +101,16 @@
 
 <!-- footer -->
 <div class="footer">
-  <div class="footer-container">
-    <p class="text-muted">@ 2017 Channel Rcommend</p>
-  </div>
+	<div class="footer-container">
+		<p class="text-muted" style="text-align: center">website by @acj @wty @icy @zyr</p>
+	</div>
 </div>
 <script src="js/jquery-3.1.1.js"></script>
 <script src="js/bootstrap-3.3.7.js"></script>
 <script src="js/offcanvas.js"></script>
 <script type="text/javascript" src="js/session.js"></script>
 <script type="text/javascript" src="js/jquery.messager.js"></script>
-<script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
 <script src="js/history.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 </body>

@@ -25,15 +25,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">频道推荐系统</a>
+      <a class="navbar-brand">频道推荐系统</a>
     </div>
     <!-- navbar-header end -->
     <!-- navbar-collapse begin -->
     <div id="navbar" class="collapse navbar-collapse" aria-expanded="false" style="height: 1px;">
       <ul class="nav navbar-nav">
-         <li><a href="index.html">频道类别</a></li>
+          <li><a href="index.html">频道类别</a></li>
 		  <li><a href="history.html">观看历史</a></li>
-		  <li><a onclick="showUp()">频道推荐</a></li>
+		  <li><a href="recommend.html">推荐排行</a></li>
+		  <li><a href="#" onclick="showUp()">单个推荐</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a class="name" id="userName"></a></li>
@@ -68,8 +69,15 @@
 							<th>月点击量</th>
 						</tr>
 					</thead>
-					<tbody id="tbody">
-						<!-- 频道 -->
+					<tbody id="tchannel">
+					<!-- 频道 -->
+					<tr onclick='selectC(this)' v-for="channel in channels">
+						<td><input type="checkbox" id="{{channel.id}}" name="checkname[]" value="{{channel.id}}"></td>
+						<td>{{channel.id}}</td>
+						<td>{{channel.channelName}}</td>
+						<td>{{channel.type}}</td>
+						<td>{{channel.clickTime}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
@@ -94,9 +102,9 @@
 
 <!-- footer -->
 <div class="footer">
-  <div class="footer-container">
-    <p class="text-muted">@ 2017 Channel Rcommend</p>
-  </div>
+	<div class="footer-container">
+		<p class="text-muted" style="text-align: center">website by @acj @wty @icy @zyr</p>
+	</div>
 </div>
 <script src="js/jquery-3.1.1.js"></script>
 <script src="js/bootstrap-3.3.7.js"></script>
@@ -105,6 +113,6 @@
 <script type="text/javascript" src="js/jquery.messager.js"></script>
 <script type="text/javascript" src="js/browser.js"></script>
 <script src="js/toChannel.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
 </body>
 </html>

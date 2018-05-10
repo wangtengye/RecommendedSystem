@@ -51,7 +51,7 @@ function getTypes(type,name) {
 function loadChannel(type){//获得频道信息
 	var url = "getChannels/"+type;
 	$.getJSON(url,function(data){
-		list = data.data;
+		/*list = data.data;
 		var length = list.length;
 		var cType = list[0].type;
 		for (var i = 0; i < length; i++) {
@@ -64,7 +64,14 @@ function loadChannel(type){//获得频道信息
 				"</td><td>"+channel.clickTime+
 				"</td></tr>";
 			$("#tbody").append(tr);
-		};
+
+		};*/
+		var app4c = new Vue({
+            el: '#tchannel',
+            data: {
+                channels:data.data
+            }
+        })
 	});
 }
 

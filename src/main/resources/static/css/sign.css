@@ -1,7 +1,7 @@
 body {
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #eee;
+  background-color: #FF9C1E;
 }
 
 .form-signin {
@@ -52,4 +52,24 @@ body {
 /* at the begining 登录 */
 #to-signin , #login , #inputPwd2{/* */
   display: none;
+}
+h1{
+  font-family: Consolas;
+  margin-left: 20px;
+}
+h2{
+  font-family: Consolas;
+  font-size: 40px;
+}
+label{
+  font-family: Consolas;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: none;
 }

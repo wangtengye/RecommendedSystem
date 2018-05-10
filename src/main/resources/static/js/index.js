@@ -22,7 +22,7 @@ function show_event(e){//捕获关闭
 }
 
 function showUp(){//显示10秒
-    var url='recommand/'+$.session.get('userId');
+    var url='recommend/'+$.session.get('userId');
     $.getJSON(url,function(msg){
         switch(msg.status){
             case 0:{
@@ -68,11 +68,27 @@ function showTypes() {
         var list = data.data;
         var len = list.length;
         for(var i=0;i<len;i++) {
-            var html = '<div class="col-xs-6 col-sm-3 placeholder" id="forth" onclick="choose(\''+ list[i] +'\')">' +
-                '<img src="img/'+(i+1)+'.png" width="150" height="150" class="img-responsive" alt="">' +
+            if(i==0)
+            {
+                var html = '<div class="col-xs-6 col-sm-4 placeholder" id="forth" onclick="choose(\''+ list[i] +'\')">' +
+                '<img src="img/'+(i+1)+'.png" width="100" height="100" class="img-responsive" alt="">' +
                 '<h4>'+list[i]+'</h4>' +
                 '</div>';
-            $('#types').append(html);
+                $('#types').append(html);
+                }
+            else
+            {
+                var html1 = '<div class="col-xs-6 col-sm-4 placeholder" >' +
+                '<img src="img/transparent.png" height="100" class="img-responsive" alt="">' +
+                '<h4>-</h4>' +
+                '</div>';
+                var html2 = '<div class="col-xs-6 col-sm-4 placeholder" id="forth" onclick="choose(\''+ list[i] +'\')">' +
+                '<img src="img/'+(i+1)+'.png" width="100" height="100" class="img-responsive" alt="">' +
+                '<h4>'+list[i]+'</h4>' +
+                '</div>';
+                $('#types').append(html1+html2);
+                }
+
         }
     });
 }

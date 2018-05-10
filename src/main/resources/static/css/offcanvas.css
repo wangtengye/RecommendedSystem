@@ -5,6 +5,11 @@
   .page-header{
   margin-top: 20px;
   }
+  .container{
+  width: 970px;
+  padding-right: 9px;
+  padding-left: 9px;
+  }
 }
 /*
  * Off Canvas

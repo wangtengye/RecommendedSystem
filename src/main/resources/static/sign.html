@@ -7,33 +7,71 @@
 	<title>频道推荐系统-登录</title>
 	<link href="css/bootstrap-3.3.7.css" rel="stylesheet" type="text/css">
 	<link href="css/sign.css" rel="stylesheet" type="text/css">
-	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-	<script type="text/javascript" src="js/session.js"></script>
-	<script type="text/javascript" src="js/login.js"></script>
+	<link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-<div class="container">
-	<form class="form-signin" method="post" id="sign">
-		<h2 class="form-signin-heading" id="title">请登录</h2>
-		<label for="inputName" class="sr-only">姓名</label>
-		<input type="name" id="inputName" name="inputName" class="form-control" placeholder="输入姓名" required="required" autofocus="autofocus">
-		<label for="inputPwd" class="sr-only">密码</label>
-		<input type="password" id="inputPwd" name="inputPwd" class="form-control" placeholder="输入密码" required autofocus>
-		<label for="inputPwd2" class="sr-only">密码2</label>
-		<input type="password" id="inputPwd2" name="inputPwd2" class="form-control" placeholder="确认密码">
-		<span id="pwdHint"></span>
-		<div class="checkbox">
-			<label>
-				<input type="checkbox" value="remember-me" name="rem">
-				记住我
-			</label>
-			<a class="float-right" id="to-login" onclick="toLogin()">去注册</a>
-			<a class="float-right" id="to-signin" onclick="toSignin()">去登录</a>
+<div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#433100 ">
+	<!-- container begin -->
+	<div class="container">
+		<div class="navbar-header">
+			<!-- toggle icon -->
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+					aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand">频道推荐系统</a>
 		</div>
-		<input class="btn btn-lg btn-primary btn-block" type="button" id="signin" value="登录">
-		<input class="btn btn-lg btn-primary btn-block" type="button" id="login" value="注册">
-	</form>
+		<!-- navbar-header end -->
+		<!-- navbar-collapse begin -->
+		<!-- navbar-collapse end -->
+	</div>
+	<!-- container end -->
 </div>
+
+<div class="container">
+	<div class="col-lg-1"></div>
+	<div class="col-lg-5">
+		<img src="img/giphy.gif" height="400px" width="400px" style="transform: rotate(5deg);" alt="">
+		<h1><b>I AM LOOKING AT YOU.</b></h1>
+	</div>
+	<div class="col-lg-6" style="margin-top: 70px;float:right;">
+		<form class="form-signin" method="post" id="sign">
+			<h2 id="title"><b>LOGIN</b></h2>
+			<label for="inputName" class="sr-only">NAME</label>
+			<input type="name" id="inputName" name="inputName" class="form-control" placeholder="INTER NAME" required="required"
+				   autofocus="autofocus">
+			<label for="inputPwd" class="sr-only">PASSWORD</label>
+			<input type="password" id="inputPwd" name="inputPwd" class="form-control" placeholder="ENTER PASSWORD" required autofocus>
+			<label for="inputPwd2" class="sr-only">PASSWORD2</label>
+			<input type="password" id="inputPwd2" name="inputPwd2" class="form-control" placeholder="CONFIRM PASSWORD">
+			<span id="pwdHint"></span>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="remember-me" name="rem">
+					REMEMBER ME
+				</label>
+				<a class="float-right" id="to-login" onclick="toLogin()" style="color: #433100;">SIGN UP</a>
+				<a class="float-right" id="to-signin" onclick="toSignin()" style="color: #433100;">SIGN IN</a>
+			</div>
+			<input class="btn btn-lg btn-primary btn-block" type="button" id="signin" value="SIGN IN" style="background-color: #433100;">
+			<input class="btn btn-lg btn-primary btn-block" type="button" id="login" value="SIGN UP" style="background-color: #433100;">
+		</form>
+	</div>
+	<div class="col-lg-6">
+	</div>
+</div>
+
+<div class="footer">
+	<div class="footer-container">
+		<p class="text-muted" style="text-align: center">website by @acj @wty @icy @zyr</p>
+	</div>
+</div>
+<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+<script type="text/javascript" src="js/session.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
 </body>
 </html>
