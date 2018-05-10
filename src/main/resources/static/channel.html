@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/offcanvas.css">
 	<link rel="stylesheet" type="text/css" href="css/history.css">
+	<script src="js/index.js"></script>
 </head>
 
 <body>
@@ -62,7 +63,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th><input type="checkbox" id="selectAll">全选</th>
+							<th ></th>
 							<th>频道编号</th>
 							<th>频道名称</th>
 							<th>所属类别</th>
@@ -72,7 +73,7 @@
 					<tbody id="tchannel">
 					<!-- 频道 -->
 					<tr onclick='selectC(this)' v-for="channel in channels">
-						<td><input type="checkbox" id="{{channel.id}}" name="checkname[]" value="{{channel.id}}"></td>
+						<td id="{{channel.id}}" name="checkname[]" value="{{channel.id}}"></td>
 						<td>{{channel.id}}</td>
 						<td>{{channel.channelName}}</td>
 						<td>{{channel.type}}</td>
